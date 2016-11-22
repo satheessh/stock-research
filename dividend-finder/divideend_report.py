@@ -13,10 +13,13 @@ tickers = [dividend_info['ticker'] for dividend_info in dividend_infos]
 ticker_infos = ticker_scrap.get_ticker_from_yahoo(tickers)
 
 for dividend_info in dividend_infos:
-    ticker_info = ticker_infos[dividend_info['ticker']]
-    if ticker_info['LastTradePriceOnly']:
-        ticker_info['current_yield'] = (dividend_info['dividend'] * 100) / float(ticker_info['LastTradePriceOnly'])
-    ticker_info.update(dividend_info)
+    try:
+        ticker_info = ticker_infos[dividend_info['ticker']]
+        if ticker_info['LastTradePriceOnly']:
+            ticker_info['current_yield'] = (dividend_info['dividend'] * 100) / float(ticker_info['LastTradePriceOnly'])
+        ticker_info.update(dividend_info)
+    except:
+        pass
 
 
 sorted_by_yield = sorted(ticker_infos.values(), key=lambda ticker_info: ticker_info.get('current_yield', 0.0), reverse=True)
